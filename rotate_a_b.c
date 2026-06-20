@@ -6,7 +6,7 @@
 /*   By: tfujikaw <tfujikaw@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 01:53:00 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/05/25 03:05:09 by tfujikaw         ###   ########.fr       */
+/*   Updated: 2026/06/20 14:48:52 by tfujikaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	rotate_a_b(t_swap **stack)
 	first->next = NULL;
 	return (1);
 }
-/*
+
 void	rotate_ra(t_swap **stack_a)
 {
 	if (rotate_a_b(stack_a) == 1)
@@ -54,7 +54,7 @@ void	rotate_rr(t_swap **stack_a, t_swap **stack_b)
 	if (check_a == 1 || check_b == 1)
 		write(1, "rr\n", 3);
 }
-
+/*
 #include <stdio.h>
 
 // テスト用：スタックの状態を上から順番にプリントする関数

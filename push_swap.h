@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htakumi <htakumi@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 19:07:08 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/06/20 14:14:14 by htakumi          ###   ########.fr       */
+/*   Updated: 2026/06/20 16:01:24 by hibitakumi       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ void				push_pb(t_swap **stack_a, t_swap **stack_b);
 void				rotate_ra(t_swap **stack_a);
 void				rotate_rb(t_swap **stack_b);
 void				rotate_rr(t_swap **stack_a, t_swap **stack_b);
+void    			rev_rotate_a(t_swap **stack_a);
+void    			rev_rotate_b(t_swap **stack_b);
+void    			rev_rotate_r(t_swap **stack_a, t_swap **stack_b);
+
+
 
 double				calculate_disorder_fast(int a[], int n);
 int					disorder_flg(double n);
