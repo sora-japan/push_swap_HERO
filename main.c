@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
+/*   By: htakumi <htakumi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 11:24:18 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/06/20 13:40:46 by hibitakumi       ###   ########.fr       */
+/*   Updated: 2026/06/20 14:17:46 by htakumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "./libft/libft.h"
 #include "push_swap.h"
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-int select_option(char *av)
+int	select_option(char *av)
 {
 	if (ft_strcmp(av, "--simple") == 0)
 		return (1);
@@ -30,10 +31,10 @@ int select_option(char *av)
 	return (0);
 }
 
-int is_valid_number(char *str)
+int	is_valid_number(char *str)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	if (str[i] == '-')
 	{
@@ -44,23 +45,22 @@ int is_valid_number(char *str)
 	while (str[i] != '\0')
 	{
 		if (str[i] < '0' || str[i] > '9')
-			return 0;
+			return (0);
 		i++;
 	}
 	return (1);
 }
 
-int check_duplicate(char *av)
+int	check_duplicate(char *av)
 {
-	char **arr;
-	int	i;
-    int j;
-	int k;
-	
+	char	**arr;
+	int		i;
+	int		j;
+	int		k;
+
 	arr = ft_split(av, ' ');
 	if (!arr)
 		return (0);
-	
 	i = 0;
 	while (arr[i])
 	{
@@ -103,7 +103,7 @@ t_swap	*stack_init(char *str)
 	t_swap	*tail;
 	t_swap	*node;
 
-	p_start = ft_split(str, " ");
+	p_start = ft_split(str, ' ');
 	if (p_start == NULL)
 		return (NULL);
 	p = p_start;
@@ -132,24 +132,24 @@ t_swap	*stack_init(char *str)
 int	main(int ac, char **av)
 {
 	int		op;
+	int		check;
+	t_swap	*head;
+	t_swap	*tmp;
+
 	// char		**p;
 	// t_swap	*a;
 	// t_swap	b;
-	int check;
-	t_swap *head;
 	// t_swap *tail;
 	// t_swap *node;
 	// char **p_start; // ft_splitの戻り値の先頭(後でfree)
-
 	// a = NULL;
 	if (ac == 1)
 		return (0);
 	else if (ac != 2 && ac != 3)
 	{
-		write (2, "1: Error\n", 9);
+		write(2, "1: Error\n", 9);
 		return (0);
 	}
-
 	// option
 	if (ac == 3)
 	{
@@ -157,28 +157,32 @@ int	main(int ac, char **av)
 		op = select_option(*av);
 		if (op == 0)
 		{
-			write (2, "2: Error\n", 9);
+			write(2, "2: Error\n", 9);
 			return (0);
 		}
 	}
 	av++;
-	//number check
+	// number check
 	check = check_duplicate(*av);
 	printf("check: %d", check);
 	if (check == 0)
 	{
-		write (2, "3: Error\n", 9);
+		write(2, "3: Error\n", 9);
 		return (0);
 	}
 	// stack
 	head = stack_init(*av);
-	
+	tmp = head;
+	while (tmp)
+	{
+		printf("%d\n", tmp->num);
+		tmp = tmp->next;
+	}
 	// while (*p)
 	// {
 	// 	a = malloc(sizeof(t_swap));
 	// 	a.num = ft_atoi(*p);
 	// 	p++;
 	// }
-	
 	return (0);
 }

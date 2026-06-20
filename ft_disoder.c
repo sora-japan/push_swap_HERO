@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_disoder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
+/*   By: htakumi <htakumi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 15:17:28 by hibitakumi        #+#    #+#             */
-/*   Updated: 2026/06/13 15:37:53 by hibitakumi       ###   ########.fr       */
+/*   Updated: 2026/06/20 14:13:19 by htakumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,23 +122,23 @@ int disorder_flg(double n)
     // 0.5 以上（かなり乱れている）	O(n log n)
 }
 
-int	main(void)
-{
-	int		array[8];
-	int		n;
-	int		flg;
-	double	disorder;
+// int	main(void)
+// {
+// 	int		array[8];
+// 	int		n;
+// 	int		flg;
+// 	double	disorder;
 
-	array[0] = 1;
-	array[1] = 2;
-	array[2] = 4;
-	array[3] = 3;
+// 	array[0] = 1;
+// 	array[1] = 2;
+// 	array[2] = 4;
+// 	array[3] = 3;
 
-	
-	n = 4;
-	disorder = calculate_disorder_fast(array, n);
-	flg = disorder_flg(disorder);
-	printf("不整合度 (Disorder): %.4f\n", disorder);
-	printf("オプション: %d\n", flg);
-	return (0);
-}
+
+// 	n = 4;
+// 	disorder = calculate_disorder_fast(array, n);
+// 	flg = disorder_flg(disorder);
+// 	printf("不整合度 (Disorder): %.4f\n", disorder);
+// 	printf("オプション: %d\n", flg);
+// 	return (0);
+// }
