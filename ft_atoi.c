@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfujikaw <tfujikaw@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 13:12:02 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/05/04 16:53:53 by tfujikaw         ###   ########.fr       */
+/*   Updated: 2026/06/20 12:34:39 by hibitakumi       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(void)
 {
 	char	*int_min;
 
-	int_min = "-2147483648";
+	int_min = "abc";
 	printf("%d\n", ft_atoi(int_min));
 	printf("%d\n", atoi(int_min));
 	return (0);
