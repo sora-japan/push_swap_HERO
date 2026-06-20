@@ -6,7 +6,7 @@
 /*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 11:24:18 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/06/13 15:46:44 by hibitakumi       ###   ########.fr       */
+/*   Updated: 2026/06/13 16:22:42 by hibitakumi       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ int check_duplicate(char *av)
 int	main(int ac, char **av)
 {
 	int		op;
-	t_swap	a;
+	char		**p;
+	t_swap	*a;
 	// t_swap	b;
 	int check;
 
+	a = NULL;
 	if (ac == 1)
 		return (0);
 	else if (ac != 2 && ac != 3)
@@ -107,14 +109,27 @@ int	main(int ac, char **av)
 		return (0);
 	}
 	// stack
-	while (**av != '\0')
+	p = ft_split(*av, ' ');
+	if (p == NULL)
+		return (0);
+	while (*p)
 	{
-		if (**av != ' ')
-		{
-			a.num = (int)*av;
-			// write(1, *av, 1);
-		}
-		(*av)++;
+		a = malloc(sizeof(t_swap));
+		a.num = ft_atoi(*p);
+		p++;
 	}
+	
 	return (0);
 }
+
+a.num = (int)*av;
+a.pre = NULL;
+a.next = &a2;
+
+while (**av != '\0')
+{
+	a.num = (int)*av;
+	a.next->pre
+}
+
+ft_split(*av, ' ');
