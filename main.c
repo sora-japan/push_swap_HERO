@@ -6,7 +6,7 @@
 /*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 11:24:18 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/06/20 16:41:13 by hibitakumi       ###   ########.fr       */
+/*   Updated: 2026/06/25 01:31:44 by tfujikaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ t_swap	*stack_init(char *str)
 		if (!node)
 			return (NULL);
 		node->num = ft_atoi(*p);
+		node->rank = 0;
 		node->next = NULL;
 		node->pre = tail;
 		if (tail != NULL)
@@ -129,98 +130,162 @@ t_swap	*stack_init(char *str)
 	return (head);
 }
 
-//STAGE 2：ヘルパー関数①「スタックのサイズを求める」 ループの回数（n-2回）を決めるためにサイズが必要です。
+// ミディアムアルゴ
 
-static int stack_size(t_swap *stack)
+void	chunk_rank(t_swap *a)
 {
-	int count;
-	
-	count = 0;
-	while (stack != NULL)
+	t_swap	*min_rank;
+	t_swap	*cur;
+	int		rank_count;
+
+	min_rank = a;
+	while (min_rank != NULL)
 	{
-		count++;
-		stack = stack->next;
+		cur = a;
+		rank_count = 0;
+		while (cur != NULL)
+		{
+			if (cur->num < min_rank->num)
+			{
+				rank_count++;
+			}
+			cur = cur->next;
+		}
+		min_rank->rank = rank_count;
+		min_rank = min_rank->next;
+	}
+}
+
+// 　√nの計算
+static int	chunk_size(t_swap *stack)
+{
+	int	n;
+	int	i;
+
+	n = stack_size(stack);
+	i = 1;
+	if (n <= 3)
+		return (n);
+	while (i * i <= n)
+		i++;
+	return (i - 1);
+}
+// 役割： 今のチャンク範囲に何個の要素があるかを数える
+// なぜ必要か： bring_chunk の内ループを「あと何回 pb すれば終わりか」で管理するため。
+static int	count_in_chunk(t_swap *a, int start, int end)
+{
+	int	count;
+
+	count = 0;
+	while (a != NULL)
+	{
+		if (a->rank >= start && a->rank < end)
+			count++;
+		a = a->next;
 	}
 	return (count);
 }
 
-// STAGE 3：ヘルパー関数②「最小値のインデックスを求める」 スタックの先頭を index=0 として、最小値が何番目にあるかを返します。
-static int find_min_index(t_swap *stack)
+// 役割： チャンク範囲内で一番近い要素が先頭から何番目にあるかを返す
+// なぜ必要か： ra（前から回す）か rra（後ろから回す）かを判断するため。位置が size/2 以下なら ra、超えていれば rra が効率的。
+static int	find_chunk_index(t_swap *a, int start, int end)
 {
-	int i;
-	int min;
-	int count;
-	
-	if (stack == NULL)
-		return (-1);
-	i = 0;
-	count = 0;
-	min = stack->num;
-	while (stack != NULL)
+	int	j;
+
+	j = 0;
+	while (a != NULL)
 	{
-		if (min > stack->num)
-		{
-			min = stack->num;
-			i = count;
-		}
-		stack = stack->next;
-		count++;
+		if (a->rank >= start && a->rank < end)
+			return (j);
+		a = a->next;
+		j++;
 	}
-	return (i);
+	return (0);
 }
-
-// STAGE 4：最小値を先頭に持ってくる インデックスとサイズをもとに、どちら向きに回転するか決めます。
-// 最小値を先頭に持ってくる
-static void	bring_min_to_top(t_swap **a, int min_index, int size)
+// 役割： チャンクを0番から順に処理して、a の全要素を b に積む
+void	bring_chunk(t_swap **a, t_swap **b, int chunk_size)
 {
-	int i;
+	int	chunk_start;
+	int	chunk_end;
+	int	count;
 
-	i = 0;
-	if (min_index <= size / 2)
+	chunk_start = 0;
+	chunk_end = chunk_size;
+	while (*a != NULL)
 	{
-		while (i < min_index)
+		count = count_in_chunk(*a, chunk_start, chunk_end);
+		while (count > 0)
 		{
-			rotate_ra(a);
-			i++;
+			if ((*a)->rank >= chunk_start && (*a)->rank < chunk_end)
+			{
+				push_pb(a, b);
+				count--;
+			}
+			else if (find_chunk_index(*a, chunk_start,
+					chunk_end) <= stack_size(*a) / 2)
+				rotate_ra(a);
+			else
+				rev_rotate_a(a);
 		}
-	}
-	else
-	{
-		while (i < (size - min_index))
-		{
-			rev_rotate_a(a);
-			i++;
-		}
+		chunk_start = chunk_end;
+		chunk_end += chunk_size;
 	}
 }
 
-// main での呼び出しイメージ：
-// t_swap *a = stack_init(*av);
-// t_swap *b = NULL;        ← b は最初空
-// simple_algorithm(&a, &b);
-void simple_algorithm(t_swap **a, t_swap **b)
+static int	find_max_rank_index(t_swap *b)
 {
-	int n;
-	int i;
-	int min_index;
-	int size;
+	int	max_rank;
+	int	max_index;
+	int	i;
 
-	n = stack_size(*a);
-	if (n <= 1)
-		return ;
+	max_rank = b->rank;
+	max_index = 0;
 	i = 0;
-	while (i < n - 2)
+	while (b != NULL)
 	{
-		min_index = find_min_index(*a);
-		size = stack_size(*a);
-		bring_min_to_top(a, min_index, size);
-		push_pb(a, b);
+		if (b->rank > max_rank)
+		{
+			max_rank = b->rank;
+			max_index = i;
+		}
+		b = b->next;
 		i++;
 	}
-	if ((*a)->num > (*a)->next->num)
-		swap_sa(*a);
+	return (max_index);
+}
+
+void	pull_from_b(t_swap **a, t_swap **b)
+{
+	int	max_idx;
+	int	size;
+
 	while (*b != NULL)
+	{
+		size = stack_size(*b);
+		max_idx = find_max_rank_index(*b);
+		if (max_idx <= size / 2)
+		{
+			while (max_idx-- > 0)
+				rotate_rb(b);
+		}
+		else
+		{
+		    max_idx = size - max_idx;
+    		while (max_idx-- > 0)
+        		rev_rotate_b(b);
+		}
 		push_pa(a, b);
+	}
+}
+
+void	medium_algorithm(t_swap **a, t_swap **b)
+{
+	int	n;
+
+	chunk_rank(*a);       // STAGE 1: ランク付け
+	n = chunk_size(*a);   // STAGE 2: チャンクサイズ
+	bring_chunk(a, b, n); // STAGE 3: b に積む
+	pull_from_b(a, b);    // STAGE 4: a に戻す ← 追加
 }
 
 int	main(int ac, char **av)
@@ -228,9 +293,9 @@ int	main(int ac, char **av)
 	int		op;
 	int		check;
 	t_swap	*head;
+	t_swap	*b;
+
 	// t_swap	*tmp;
-	t_swap *b;
-	
 	// char		**p;
 	// t_swap	*a;
 	// t_swap	b;
@@ -271,10 +336,12 @@ int	main(int ac, char **av)
 	head = stack_init(*av);
 	if (op == 1)
 		simple_algorithm(&head, &b);
+	if (op == 2)
+		medium_algorithm(&head, &b);
 	// tmp = head;
-	//while (tmp)
+	// while (tmp)
 	//{
-		// printf("%d\n", tmp->num);
+	// printf("%d\n", tmp->num);
 	//	tmp = tmp->next;
 	//}
 	// while (*p)
