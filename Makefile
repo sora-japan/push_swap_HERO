@@ -33,18 +33,18 @@ all: $(LIBFT) $(NAME)
 $(LIBFT):
 	 $(MAKE) -C $(LIBFT_DIR)
 $(NAME): $(OBJS) $(LIBFT)
-      $(CC) $(CFLAG) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
+	$(CC) $(CFLAG) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
 
 %.o: %.c $(HEADER)
-      $(CC) $(CFLAG) -I. -I$(LIBFT_DIR) -c $< -o $@
+	$(CC) $(CFLAG) -I. -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-      $(RM) $(NAME)
-      $(MAKE) -C $(LIBFT_DIR) fclean
+	$(RM) $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

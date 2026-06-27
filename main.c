@@ -6,7 +6,7 @@
 /*   By: hibitakumi <hibitakumi@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 11:24:18 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/06/25 01:31:44 by tfujikaw         ###   ########.fr       */
+/*   Updated: 2026/06/28 08:46:34 by tfujikaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+char *join_argv(char **av)
+{
+	int total;
+	int i;
+	char *result;
+
+	i = 0;
+	total = 0;
+	while (av[i])
+	{
+		total += ft_strlen(av[i]) + 1;
+		i++;
+	}
+	result = malloc(total + 1);
+	if (!result)
+		return (NULL);
+	result[0] = '\0';
+	i = 0;
+	while (av[i])
+	{
+		ft_strlcat(result, av[i], total + 1);
+		if (av[i + 1])
+			ft_strlcat(result, " ", total + 1);
+		i++;
+	}
+	return (result);
+}
 
 int	select_option(char *av)
 {
@@ -294,6 +322,7 @@ int	main(int ac, char **av)
 	int		check;
 	t_swap	*head;
 	t_swap	*b;
+	char *join;
 
 	// t_swap	*tmp;
 	// char		**p;
@@ -306,34 +335,44 @@ int	main(int ac, char **av)
 	op = 0;
 	if (ac == 1)
 		return (0);
-	else if (ac != 2 && ac != 3)
-	{
-		write(2, "1: Error\n", 9);
-		return (0);
-	}
+//	else if (ac != 2 && ac != 3)
+//	{
+//		write(2, "1: Error\n", 9);
+//		return (0);
+//	}
 	// option
 	b = NULL;
-	if (ac == 3)
-	{
-		av++;
-		op = select_option(*av);
-		if (op == 0)
-		{
-			write(2, "2: Error\n", 9);
-			return (0);
-		}
-	}
 	av++;
+//	if (ac == 3)
+//	{
+//		av++;
+//		op = select_option(*av);
+//		if (op == 0)
+//		{
+//			write(2, "2: Error\n", 9);
+//			return (0);
+//		}
+//	}
+	if (select_option(*av) != 0)
+	{
+		op = select_option(*av);
+		av++;
+	}
+	join = join_argv(av);
+	if (!join)
+		return (0);
 	// number check
-	check = check_duplicate(*av);
+	check = check_duplicate(join);
 	// printf("check: %d", check);
 	if (check == 0)
 	{
+		free(join);
 		write(2, "3: Error\n", 9);
 		return (0);
 	}
 	// stack
-	head = stack_init(*av);
+	head = stack_init(join);
+	free(join);
 	if (op == 1)
 		simple_algorithm(&head, &b);
 	if (op == 2)
